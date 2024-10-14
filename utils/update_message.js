@@ -1,25 +1,22 @@
-const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
-const { PermissionFlagsBits } = require('discord.js');
-
+const { EmbedBuilder } = require('discord.js');
 const fs = require('fs');
 const path = require('path');
 
-module.exports = {
-    data: new SlashCommandBuilder()
-        .setName('qdf-contributions')
-        .setDescription('Donne les contributions indivudelles de chaque membre')
-        .addStringOption(option => option.setName('semaine').setDescription('La semaine à afficher')),
-    async execute(interaction) {
-        const jsonFilePath = path.join(__dirname, '../../data/qdf.json');
+async function updateQdfMessage(client) {
+    try {
+        const jsonFilePath = path.join(__dirname, '../data/qdf.json');
         const jsonData = JSON.parse(fs.readFileSync(jsonFilePath, 'utf-8'));
-        var currentWeekKey = 'week-1';
-        if(interaction.options.getString('semaine')) {
-            currentWeekKey = `week-` + interaction.options.getString('semaine');
-        }else {
-            currentWeekKey = jsonData["current-week"];
-        }
-        const currentWeekData = jsonData[currentWeekKey];
 
+        const currentWeekKey = jsonData['current-week'];
+        const currentWeekData = jsonData[currentWeekKey];
+        const messageId = jsonData['message'];
+        const channelId = jsonData['channel'];
+
+        // Fetch the channel and message
+        const channel = await client.channels.fetch(channelId);
+        const message = await channel.messages.fetch(messageId);
+
+        // Create the embed (this part can be re-used from your command)
         const embed = new EmbedBuilder()
             .setTitle(`Contributions des membres pour ${currentWeekKey}`)
             .setColor('#0099ff'); // Set the color of the embed
@@ -37,9 +34,9 @@ module.exports = {
 
                 for (const [userId, userData] of Object.entries(currentWeekData.usersData)) {
                     const addedItems = userData.addedItems;
-                    const userContribution = addedItems[itemName] || 0; // Get contribution for this item
+                    const userContribution = addedItems[itemName] || 0;
 
-                    const user = interaction.client.users.cache.get(userId);
+                    const user = client.users.cache.get(userId);
                     const userMention = user ? user.toString() : userId;
                     const contributionPercentage = ((userContribution / totalRequiredAmount) * 100).toFixed(2);
 
@@ -57,12 +54,17 @@ module.exports = {
                 }
 
                 itemDescription += '\n'; // Blank line for spacing
-                embed.addFields({ name: itemName, value: itemDescription.trim() }); // Add item contributions to the embed
+                embed.addFields({ name: itemName, value: itemDescription.trim() });
             }
         } else {
             embed.setDescription('Aucune donnée utilisateur disponible pour cette semaine.');
         }
 
-        await interaction.reply({ embeds: [embed] });
-    },
-};
+        // Update the message with the new embed
+        await message.edit({ embeds: [embed] });
+    } catch (e) {
+
+    }
+}
+
+module.exports = { updateQdfMessage };

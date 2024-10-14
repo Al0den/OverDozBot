@@ -1,4 +1,5 @@
 const { SlashCommandBuilder, ButtonBuilder, ActionRowBuilder, ButtonStyle, ModalBuilder, TextInputBuilder, TextInputStyle } = require('discord.js');
+const { updateQdfMessage } = require('../../utils/update_message.js');
 
 const fs = require('fs');
 const path = require('path');
@@ -16,14 +17,20 @@ module.exports = {
             qdfData = JSON.parse(data);
         } catch (error) {
             console.error('Error reading JSON file:', error);
-            return interaction.reply('Erreur lors de la lecture des données QDF.');
+            return interaction.reply({
+                content: 'Erreur lors de la lecture des données QDF.',
+                ephemeral: true
+            });
         }
 
         const currentWeek = qdfData['current-week'];
         const requiredItems = qdfData[currentWeek]?.requiredItems;
 
         if (!requiredItems || requiredItems.length === 0) {
-            return interaction.reply('Aucun article requis pour la semaine actuelle.');
+            return interaction.reply({
+                content: 'Aucun article requis pour la semaine actuelle.',
+                ephemeral: true
+            });
         }
 
         const buttons = requiredItems.map((item, index) => 
@@ -38,6 +45,7 @@ module.exports = {
         await interaction.reply({
             content: 'Veuillez sélectionner un article à ajouter à la QDF :',
             components: [actionRow],
+            ephemeral: true,
         });
 
         const filter = i => i.customId.startsWith('add_item_') && i.user.id === interaction.user.id;
@@ -70,7 +78,7 @@ module.exports = {
             return interaction.followUp('Temps écoulé. L\'ajout de l\'article a été annulé.');
         }
 
-        await modalSubmitInteraction.deferReply();
+        await modalSubmitInteraction.deferReply({ephemeral : true});
         const amount = parseInt(modalSubmitInteraction.fields.getTextInputValue('amount_input'), 10);
 
         // Update the JSON to reflect the added item
@@ -98,6 +106,7 @@ module.exports = {
         try {
             fs.writeFileSync(qdfFilePath, JSON.stringify(qdfData, null, 2));
             console.log(`Article ajouté : ${selectedItem.item} (${amount}) pour l'utilisateur ${userId}`);
+            updateQdfMessage(interaction.client);
             await modalSubmitInteraction.followUp(`Article ajouté : ${selectedItem.item} (${amount}).`);
         } catch (error) {
             console.error('Error writing JSON file:', error);

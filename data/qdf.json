@@ -1,29 +1,26 @@
 {
+  "current-week": "week-1",
+  "message": "1295389832566018178",
+  "channel": "1295381619397492836",
   "week-1": {
     "requiredItems": [
       {
-        "item": "dirt",
-        "amount": 500000,
-        "current": 540000
+        "item": "Fer",
+        "amount": 200,
+        "current": 140
       },
       {
-        "item": "gravel",
-        "amount": 1000000,
-        "current": 450000
+        "item": "Or",
+        "amount": 132,
+        "current": 0
       }
     ],
     "usersData": {
       "510829827880648741": {
         "addedItems": {
-          "dirt": 540000
-        }
-      },
-      "718814566988906587": {
-        "addedItems": {
-          "gravel": 450000
+          "Fer": 140
         }
       }
     }
-  },
-  "current-week": "week-1"
+  }
 }
