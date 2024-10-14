@@ -1,0 +1,29 @@
+{
+  "week-1": {
+    "requiredItems": [
+      {
+        "item": "dirt",
+        "amount": 500000,
+        "current": 540000
+      },
+      {
+        "item": "gravel",
+        "amount": 1000000,
+        "current": 450000
+      }
+    ],
+    "usersData": {
+      "510829827880648741": {
+        "addedItems": {
+          "dirt": 540000
+        }
+      },
+      "718814566988906587": {
+        "addedItems": {
+          "gravel": 450000
+        }
+      }
+    }
+  },
+  "current-week": "week-1"
+}
