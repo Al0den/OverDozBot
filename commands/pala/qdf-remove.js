@@ -18,10 +18,16 @@ module.exports = {
         if (jsonData[`week-${semaine}`]) {
             delete jsonData[`week-${semaine}`];
             fs.writeFileSync(jsonFilePath, JSON.stringify(jsonData, null, 4));
-            await interaction.reply(`La QDF pour la semaine ${semaine} a été supprimée.`);
+            await interaction.reply({
+                content: `La QDF pour la semaine ${semaine} a été supprimée.`,
+                ephemeral: true
+            });
             updateQdfMessage(interaction.client);
         } else {
-            await interaction.reply(`Aucune QDF trouvée pour la semaine ${semaine}.`);
+            await interaction.reply({
+                content:`Aucune QDF trouvée pour la semaine ${semaine}.`,
+                ephemeral: true
+            });
         }
     },
 };

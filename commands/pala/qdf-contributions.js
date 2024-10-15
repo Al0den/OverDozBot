@@ -63,6 +63,6 @@ module.exports = {
             embed.setDescription('Aucune donnée utilisateur disponible pour cette semaine.');
         }
 
-        await interaction.reply({ embeds: [embed] });
+        await interaction.reply({ embeds: [embed], ephemeral: true });
     },
 };

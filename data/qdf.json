@@ -1,6 +1,6 @@
 {
   "current-week": "week-1",
-  "message": "1295389832566018178",
+  "message": "1295394255275298938",
   "channel": "1295381619397492836",
   "week-1": {
     "requiredItems": [
@@ -12,13 +12,19 @@
       {
         "item": "Or",
         "amount": 132,
-        "current": 0
+        "current": 140
       }
     ],
     "usersData": {
       "510829827880648741": {
         "addedItems": {
-          "Fer": 140
+          "Fer": 140,
+          "Or": 55
+        }
+      },
+      "718814566988906587": {
+        "addedItems": {
+          "Or": 85
         }
       }
     }

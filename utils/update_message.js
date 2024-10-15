@@ -60,11 +60,41 @@ async function updateQdfMessage(client) {
             embed.setDescription('Aucune donnée utilisateur disponible pour cette semaine.');
         }
 
-        // Update the message with the new embed
-        await message.edit({ embeds: [embed] });
-    } catch (e) {
+        const secondEmbed = new EmbedBuilder()
+            .setTitle(`Articles requis pour ${currentWeekKey}`)
+            .setColor('#0099ff'); // Set the color of the embed
 
+        if (currentWeekData && currentWeekData.requiredItems && currentWeekData.requiredItems.length > 0) {
+            const requiredItems = currentWeekData.requiredItems.map(item => {
+                const requiredAmount = item.amount;
+                const currentAmount = item.current;
+                const progress = Math.min((currentAmount / requiredAmount) * 100, 100); // Calculate progress
+                const progressBar = createProgressBar(progress);
+
+                return `**${item.item}** - Requis: ${requiredAmount}, Actuel: ${currentAmount}\n${progressBar}\n`;
+            }).join('\n');
+
+            secondEmbed.setDescription(requiredItems);
+        } else {
+            secondEmbed.setDescription('Aucun article requis pour cette semaine.');
+        }
+        // Update the message with the new embed
+        await message.edit({ embeds: [secondEmbed, embed] });
+    } catch (e) {
+        console.error(e);
     }
+}
+
+
+// Function to create a progress bar
+function createProgressBar(percent) {
+    const totalBars = 10; // Total number of bars
+    const filledBars = Math.round((percent / 100) * totalBars);
+    const emptyBars = totalBars - filledBars;
+    const filled = '█'.repeat(filledBars); // Filled part of the bar
+    const empty = '░'.repeat(emptyBars);   // Empty part of the bar
+
+    return `[${filled}${empty}] ${percent.toFixed(0)}%`; // Return formatted progress bar
 }
 
 module.exports = { updateQdfMessage };
