@@ -11,34 +11,29 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('qdf-init')
         .setDescription('Met en place la QDF de la semaine')
-        .setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
+        .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
+        .addIntegerOption(option => option.setName('semaine').setDescription('La semaine à configurer').setRequired(true)),
     async execute(interaction) {
         const qdf = []; // Store items and amounts for the QDF
+        const qdfFilePath = path.join(__dirname, '../../data', 'qdf.json');
 
-        const weekModal = new ModalBuilder()
-            .setCustomId('week_modal')
-            .setTitle('Configuration de la QDF');
+        const week = interaction.options.getInteger('semaine') || 1;
+        
+        const fileData = await fs.readFile(qdfFilePath, 'utf-8');
+        const qdfData = JSON.parse(fileData);
 
-        const weekInput = new TextInputBuilder()
-            .setCustomId('week_input')
-            .setLabel('Quelle semaine mettons en place ?')
-            .setStyle(TextInputStyle.Short);
-
-        weekModal.addComponents(new ActionRowBuilder().addComponents(weekInput));
-
-        await interaction.showModal(weekModal);
-
-        const weekSubmitInteraction = await interaction.awaitModalSubmit({ time: 60000 }).catch(() => null);
-        if (!weekSubmitInteraction) {
-            return interaction.followUp({
-                content: 'Temps écoulé. La configuration a été annulée.',
+        if (qdfData[`week-${week}`]) {
+            await interaction.reply({
+                content: `La semaine ${week} est déjà configurée. Veuillez choisir une autre semaine ou enlever celle-ci.`,
                 ephemeral: true
             });
+            return;
         }
 
-        await weekSubmitInteraction.deferReply({ephemeral: true});
-        const week = weekSubmitInteraction.fields.getTextInputValue('week_input');
-        await weekSubmitInteraction.followUp(`Configuration pour la semaine ${week}.`);
+        await interaction.reply({
+            content: `Configuration pour la semaine ${week}.`,
+            ephemeral: true
+        });
 
         let finished = false; // Flag to indicate if the user is done adding items
 
@@ -55,14 +50,14 @@ module.exports = {
 
             const actionRow = new ActionRowBuilder().addComponents(addItemButton, finishButton);
 
-            await weekSubmitInteraction.followUp({
+            await interaction.followUp({
                 content: 'Veuillez ajouter des articles ou terminer la configuration.',
                 components: [actionRow],
                 ephemeral: true
             });
 
             const filter = i => i.customId === 'add_item' || i.customId === 'finish';
-            const buttonInteraction = await weekSubmitInteraction.channel.awaitMessageComponent({ filter, time: 60000 }).catch(() => null);
+            const buttonInteraction = await interaction.channel.awaitMessageComponent({ filter, time: 60000 }).catch(() => null);
 
             if (!buttonInteraction) {
                 return interaction.followUp({
@@ -121,32 +116,23 @@ module.exports = {
 
         const qdfSummary = qdf.map(({ item, amount }) => `${item} : ${amount}`).join('\n') || 'Aucun article ajouté.';
 
-        const qdfFilePath = path.join(__dirname, '../../data', 'qdf.json');
         try {
             const fileData = await fs.readFile(qdfFilePath, 'utf-8');
             const qdfData = JSON.parse(fileData);
-
-            if (qdfData[`week-${week}`]) {
-                await weekSubmitInteraction.followUp({
-                    content: `La semaine ${week} est déjà configurée. Veuillez choisir une autre semaine ou enlever celle-ci.`,
-                    ephemeral: true
-                });
-                return;
-            }
 
             qdfData[`week-${week}`] = { requiredItems: qdf };
             qdfData['current-week'] = `week-${week}`;
 
             await fs.writeFile(qdfFilePath, JSON.stringify(qdfData, null, 2));
 
-            await weekSubmitInteraction.followUp({
+            await interaction.followUp({
                 content: `QDF configurée pour la semaine ${week}.\nRésumé:\n${qdfSummary}`,
                 ephemeral: true
             })
             updateQdfMessage(interaction.client);
         } catch (error) {
             console.error('Erreur lors de la gestion du fichier QDF:', error);
-            await weekSubmitInteraction.followUp({
+            await interaction.followUp({
                 content: 'Une erreur est survenue lors de la configuration de la QDF.',
                 ephemeral: true
             });

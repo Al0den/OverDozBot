@@ -1,5 +1,5 @@
 {
-  "current-week": "week-1",
+  "current-week": "week-2",
   "message": "1295394255275298938",
   "channel": "1295381619397492836",
   "week-1": {
@@ -28,5 +28,14 @@
         }
       }
     }
+  },
+  "week-2": {
+    "requiredItems": [
+      {
+        "item": "Fer",
+        "amount": 43,
+        "current": 0
+      }
+    ]
   }
 }
