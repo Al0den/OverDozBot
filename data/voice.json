@@ -1,0 +1,24 @@
+{
+    "510829827880648741": {
+        "username": "al0den",
+        "sessions": [
+            {
+                "channelId": "1295349842733957135",
+                "channelName": "Général",
+                "joinTime": "2024-10-16T13:58:48.305Z",
+                "leaveTime": "2024-10-16T13:59:05.054Z"
+            }
+        ]
+    },
+    "718814566988906587": {
+        "username": "senechal",
+        "sessions": [
+            {
+                "channelId": "1295349842733957135",
+                "channelName": "Général",
+                "joinTime": "2024-10-16T16:16:31.561Z",
+                "leaveTime": "2024-10-16T16:16:39.226Z"
+            }
+        ]
+    }
+}
