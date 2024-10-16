@@ -2,3 +2,4 @@ SECRET.json
 node_modules
 .git
 data/qdf.json
+data/voice.json
