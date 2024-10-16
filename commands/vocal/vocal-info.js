@@ -6,7 +6,8 @@ const jsonFilePath = './data/voice.json';
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('vocal-info')
-        .setDescription('Donne la liste du temps passer en vocal sur les 7 derniers jours!'),
+        .setDescription('Donne la liste du temps passer en vocal sur les 7 derniers jours!')
+        .setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
     async execute(interaction) {
         let voiceData = JSON.parse(fs.readFileSync(jsonFilePath));
         const now = new Date();
