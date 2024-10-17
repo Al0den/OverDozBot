@@ -52,7 +52,7 @@ module.exports = {
                 embed.addFields({ name: itemName, value: itemDescription.trim() }); // Add item contributions to the embed
             }
         } else {
-            embed.setDescription('Aucune donnée utilisateur disponible pour cette semaine.');
+            embed.setDescription('Aucune donnée utilisateur disponible.');
         }
 
         await interaction.reply({ embeds: [embed], ephemeral: true });

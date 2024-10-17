@@ -2,14 +2,14 @@ const { SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = re
 
 const { PermissionFlagsBits } = require('discord.js');
 
-const { updateQdfMessage } = require('../../utils/update_message.js');
+const { updateBcMessage } = require('../../utils/update_message.js');
 
 const fs = require('fs').promises; // Import fs with promises for async file operations
 const path = require('path'); // To handle file paths
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('qdf-message-add')
+        .setName('bc-message-add')
         .setDescription('Envoie un message qui se met a jour tout seul'),
     async execute(interaction) {
         await interaction.reply('Message temporaire');
@@ -18,7 +18,7 @@ module.exports = {
         const messageId = message.id;
         const channelId = message.channel.id;
 
-        const jsonFilePath = path.join(__dirname, '../../data/qdf.json');
+        const jsonFilePath = path.join(__dirname, '../../data/bc.json');
         const jsonData = JSON.parse(await fs.readFile(jsonFilePath, 'utf-8'));
 
         // Ensure messageAdd and channelAdd exist in jsonData
@@ -36,14 +36,13 @@ module.exports = {
         await fs.writeFile(jsonFilePath, JSON.stringify(jsonData, null, 4));
 
         // Get current week
-        const currentWeek = jsonData['current-week'];
-        const requiredItems = jsonData[currentWeek]['requiredItems'] || [];
+        const requiredRessources = jsonData['requiredRessources'] || [];
 
         // Generate buttons for each required item
-        const buttons = requiredItems.map((itemData, index) => {
+        const buttons = requiredRessources.map((itemData, index) => {
             const { item, amount, current } = itemData;
             return new ButtonBuilder()
-                .setCustomId(`add_item_qdf_${index}`) // Unique ID for each button
+                .setCustomId(`add_item_bc_${index}`) // Unique ID for each button
                 .setLabel(`${item}`) // Show item name and progress
                 .setStyle(ButtonStyle.Primary);
         });
@@ -58,7 +57,7 @@ module.exports = {
         });
 
         // Call the update function
-        updateQdfMessage(interaction.client);
+        updateBcMessage(interaction.client);
 
     },
 };
