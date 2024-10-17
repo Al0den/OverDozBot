@@ -1,4 +1,5 @@
 const { SlashCommandBuilder } = require('discord.js');
+const { PermissionFlagsBits } = require('discord.js');
 const fs = require('fs');
 const path = require('path');
 const jsonFilePath = './data/voice.json';
@@ -14,7 +15,6 @@ module.exports = {
         const oneWeekAgo = new Date(now);
         oneWeekAgo.setDate(now.getDate() - 7);  // Calculate the date 7 days ago
 
-        // Prepare a message to display the vocal time
         let responseMessage = '**Temps passé en vocal sur les 7 derniers jours :**\n';
 
         for (const userId in voiceData) {
@@ -25,7 +25,6 @@ module.exports = {
                 const joinTime = new Date(session.joinTime);
                 const leaveTime = session.leaveTime ? new Date(session.leaveTime) : now;
 
-                // Only consider sessions that started within the last 7 days
                 if (joinTime >= oneWeekAgo) {
                     const sessionDuration = (leaveTime - joinTime) / 1000 / 60; // Convert duration to minutes
                     totalTimeInVoice += sessionDuration;

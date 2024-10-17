@@ -3,3 +3,4 @@ node_modules
 .git
 data/qdf.json
 data/voice.json
+data/bc.json
