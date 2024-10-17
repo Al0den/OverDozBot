@@ -11,7 +11,6 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('bc-message')
         .setDescription('Envoie un message qui se met a jour tout seul')
-        .setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
     async execute(interaction) {
         await interaction.reply('.');
 
