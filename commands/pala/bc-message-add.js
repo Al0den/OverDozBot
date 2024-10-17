@@ -38,6 +38,13 @@ module.exports = {
         // Get current week
         const requiredRessources = jsonData['requiredRessources'] || [];
 
+        if(requiredRessources == []) {
+            await interaction.editReply({
+                content: "Aucun item requis pour la base claim"
+            })
+            return;
+        }
+
         // Generate buttons for each required item
         const buttons = requiredRessources.map((itemData, index) => {
             const { item, amount, current } = itemData;

@@ -39,6 +39,13 @@ module.exports = {
         const currentWeek = jsonData['current-week'];
         const requiredItems = jsonData[currentWeek]['requiredItems'] || [];
 
+        if(requiredItems == []) {
+            await interaction.editReply({
+                content: "Aucun items requis pour la QDF"
+            })
+            return;
+        }
+
         // Generate buttons for each required item
         const buttons = requiredItems.map((itemData, index) => {
             const { item, amount, current } = itemData;
