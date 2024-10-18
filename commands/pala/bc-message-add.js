@@ -6,7 +6,8 @@ const path = require('path'); // To handle file paths
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('bc-message-add')
-        .setDescription('Envoie un message qui se met à jour tout seul'),
+        .setDescription('Envoie un message qui se met à jour tout seul')
+        .setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
     async execute(interaction) {
         await interaction.reply('Message temporaire');
 
