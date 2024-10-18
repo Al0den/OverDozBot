@@ -1,5 +1,6 @@
 const { SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 const { updateBcMessage } = require('../../utils/update_message.js');
+const { PermissionFlagsBits } = require('discord.js');
 const fs = require('fs').promises; // Import fs with promises for async file operations
 const path = require('path'); // To handle file paths
 
