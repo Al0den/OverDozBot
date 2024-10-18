@@ -1,5 +1,5 @@
 const { Events, ButtonBuilder, ActionRowBuilder, ButtonStyle, ModalBuilder, TextInputBuilder, TextInputStyle  } = require('discord.js');
-const { updateQdfMessage } = require('../utils/update_message.js');
+const { updateQdfMessage, updateBcMessage } = require('../utils/update_message.js');
 const fs = require('fs');
 const path = require('path');
 
@@ -207,7 +207,7 @@ module.exports = {
                     });
                 }
 
-                updateQdfMessage(interaction.client);
+                updateBcMessage(interaction.client);
 
             }
         }
