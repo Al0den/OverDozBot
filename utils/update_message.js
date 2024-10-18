@@ -75,7 +75,7 @@ async function updateBcMessage(client) {
             embed.setDescription('Aucune donnée utilisateur disponible.');
         }
         
-        await message.edit({ embeds: [secondEmbed, embed] });
+        await message.edit({ embeds: [secondEmbed] });
     } catch(e) {
         console.error(e);
     }
@@ -159,7 +159,7 @@ async function updateQdfMessage(client) {
             secondEmbed.setDescription('Aucun article requis pour cette semaine.');
         }
         // Update the message with the new embed
-        await message.edit({ embeds: [secondEmbed, embed] });
+        await message.edit({ embeds: [secondEmbed] });
     } catch (e) {
         console.error(e);
     }
