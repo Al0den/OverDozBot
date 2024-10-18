@@ -6,7 +6,11 @@ module.exports = {
         .setName('update-messages')
         .setDescription('Force la MAJ des items'),
     async execute(interaction) {
-        updateQdfMessage();
-        updateBcMessage();
+        updateQdfMessage(interaction.client);
+        updateBcMessage(interaction.client);
+        await interaction.reply({
+            content: "Done!",
+            ephemeral: true
+        })
     }
 }
